@@ -19,29 +19,28 @@ defmodule Bridge.IRC do
 
   """
   def run() do
-    {:ok, config} = :application.get_env(:spoonbot, :conf)
-    {server, port, nickname} = Enum.at(config, 0)
-    channel_list = Enum.at(config, 1)
+    { :ok, config } = :application.get_env(:spoonbot, :conf)
+    { server, port, nickname } = Enum.at(config, 0)
 
-    {:ok, socket} = :gen_tcp.connect(:erlang.binary_to_list(server), port, [:binary, {:active, false}])
+    { :ok, socket } = :gen_tcp.connect(:erlang.binary_to_list(server), port, [:binary, {:active, false}])
     :ok = transmit(socket, "NICK #{nickname}")
     :ok = transmit(socket, "USER #{nickname} #{server} spoonbot :spoonbot")
-    do_listen socket, channel_list
+    do_listen socket
   end
 
-  def do_listen(socket, channel_list) do
+  def do_listen(socket) do
     ping      = %r/\APING/
     motd_end  = %r/\/MOTD/
 
     case :gen_tcp.recv(socket, 0) do
-      {:ok, data} ->
+      { :ok, data } ->
         IO.puts "#{data}"
 
-        if Regex.match?(motd_end, data), do: join(socket, "JOIN #polyhack")
+        if Regex.match?(motd_end, data), do: join(socket)
         if Regex.match?(ping, data), do: pong(socket, data)
 
         do_listen(socket)
-      {:error, :closed} ->
+      { :error, :closed } ->
         IO.puts "The client closed the connection..."
     end
   end
@@ -51,9 +50,16 @@ defmodule Bridge.IRC do
     :gen_tcp.send(socket, "#{msg} \r\n")
   end
 
-  def join(socket, channels) do
+  def join(socket) do
+    { :ok, config} = :application.get_env(:spoonbot, :conf )
+    channel_list = Enum.at(config, 1)
 
-    transmit(socket, "JOIN #polyhack")
+    joiner = fn
+      { channel } -> transmit(socket, "JOIN #{channel}")
+      { channel, password } -> transmit(socket, "JOIN #{channel} #{password}")
+    end
+
+    Enum.each(channel_list, joiner)
   end
 
   def pong(socket, data) do
@@ -61,5 +67,4 @@ defmodule Bridge.IRC do
     transmit(socket, "PONG #{server}")
   end
 end
-
 
