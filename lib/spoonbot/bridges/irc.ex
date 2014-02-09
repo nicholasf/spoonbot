@@ -36,7 +36,7 @@ defmodule Bridge.IRC do
 
         if Regex.match?(msg, data) do
           matched_command = Enum.find(vocab, fn(command) -> Regex.match?(command.pattern, data) end)
-          say(socket, matched_command)
+          say(socket, data)
         end
 
         do_listen(socket, vocab)
@@ -51,8 +51,11 @@ defmodule Bridge.IRC do
   end
 
   #needs to become channel aware
-  def say(socket, msg) do
-    transmit(socket, "PRIVMSG #cbt hello ..")
+  def say(socket, data) do
+    phrase = Enum.at(String.split(data, ":"), 2)
+    IO.puts("Saying: #{phrase}")
+
+    transmit(socket, "PRIVMSG #cbt :#{phrase}")
   end
 
   def join(socket) do
