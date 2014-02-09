@@ -12,25 +12,20 @@ defmodule Bridge.IRC do
 
   end
 
-  @doc """
-    ## Config
-
-    A list of tuples containing server, nick_name, channel, channel_password
-
-  """
-  def run() do
+  def run(vocab) do
     { :ok, config } = :application.get_env(:spoonbot, :conf)
     { server, port, nickname } = Enum.at(config, 0)
 
     { :ok, socket } = :gen_tcp.connect(:erlang.binary_to_list(server), port, [:binary, {:active, false}])
     :ok = transmit(socket, "NICK #{nickname}")
     :ok = transmit(socket, "USER #{nickname} #{server} spoonbot :spoonbot")
-    do_listen socket
+    do_listen(socket, vocab)
   end
 
-  def do_listen(socket) do
+  def do_listen(socket, vocab) do
     ping      = %r/\APING/
     motd_end  = %r/\/MOTD/
+    msg       = %r/PRIVMSG spoonbot/
 
     case :gen_tcp.recv(socket, 0) do
       { :ok, data } ->
@@ -39,7 +34,12 @@ defmodule Bridge.IRC do
         if Regex.match?(motd_end, data), do: join(socket)
         if Regex.match?(ping, data), do: pong(socket, data)
 
-        do_listen(socket)
+        if Regex.match?(msg, data) do
+          matched_command = Enum.find(vocab, fn(command) -> Regex.match?(command.pattern, data) end)
+          say(socket, matched_command)
+        end
+
+        do_listen(socket, vocab)
       { :error, :closed } ->
         IO.puts "The client closed the connection..."
     end
@@ -48,6 +48,11 @@ defmodule Bridge.IRC do
   def transmit(socket, msg) do
     IO.puts "sending #{msg}"
     :gen_tcp.send(socket, "#{msg} \r\n")
+  end
+
+  #needs to become channel aware
+  def say(socket, msg) do
+    transmit(socket, "PRIVMSG #cbt hello ..")
   end
 
   def join(socket) do
