@@ -52,10 +52,11 @@ defmodule Bridge.IRC do
 
   #needs to become channel aware
   def say(socket, data) do
-    phrase = Enum.at(String.split(data, ":"), 2)
+    pieces = String.split(data, ":")
+    phrase = Enum.drop(pieces, 2)
     IO.puts("Saying: #{phrase}")
 
-    transmit(socket, "PRIVMSG #cbt :#{phrase}")
+    transmit(socket, "PRIVMSG #polyhack :#{phrase}")
   end
 
   def join(socket) do
