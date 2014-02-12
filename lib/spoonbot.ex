@@ -4,8 +4,8 @@ defmodule Spoonbot do
   def start(_type, _args) do
     bot_hello = BotSpeak.new(pattern: %r/sayeth/, doer: fn -> RobotResponse.new(msg: "hi") end)
     vocab = [bot_hello]
-    Bridge.IRC.run(vocab)
-    Bridge.HTTP.run(vocab)
+    spawn(Bridge.IRC, :run, [vocab])
+    spawn(Bridge.HTTP, :run, [vocab])
     Spoonbot.Supervisor.start_link
   end
 end
