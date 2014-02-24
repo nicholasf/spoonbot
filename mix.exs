@@ -11,7 +11,7 @@ defmodule Spoonbot.Mixfile do
   # Configuration for the OTP application
   def application do
     [ mod: { Spoonbot, [] },
-      env: [ conf: [ { "irc.freenode.org", 6667, "spoonbot" }, [ { "#polyhack" } ]] ]
+      env: [ conf: [ { "irc.freenode.org", 6667, "spoonbot" }, [ { "#polyhack" }, { "#elixir-lang" } ]] ]
     ]
   end
 

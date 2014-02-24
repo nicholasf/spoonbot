@@ -65,17 +65,24 @@ defmodule Bridge.IRC do
   end
 
   def say(socket, msg) do
-    transmit(socket, "PRIVMSG #cbt :#{msg}")
+    { :ok, config} = :application.get_env(:spoonbot, :conf )
+    channel_list = Enum.at(config, 1)
+    responder = fn
+      { channel } -> transmit(socket, "PRIVMSG #{channel} :#{msg}")
+      { channel, password } -> transmit(socket, "PRIVMSG #{channel} :#{msg}")
+    end
+
+    Enum.each(channel_list, responder)
   end
 
   #needs to become channel aware
-  def raw_say(socket, data) do
-    pieces = String.split(data, ":")
-    phrase = Enum.drop(pieces, 2)
-    IO.puts("Saying: #{phrase}")
+  # def raw_say(socket, data) do
+  #   pieces = String.split(data, ":")
+  #   phrase = Enum.drop(pieces, 2)
+  #   IO.puts("Saying: #{phrase}")
 
-    transmit(socket, "PRIVMSG #cbt :#{phrase}")
-  end
+  #   transmit(socket, "PRIVMSG #cbt :#{phrase}")
+  # end
 
   def join(socket) do
     { :ok, config} = :application.get_env(:spoonbot, :conf )

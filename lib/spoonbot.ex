@@ -7,7 +7,7 @@ defmodule Spoonbot do
     loader = fn(module) ->
       signatures = module.__info__(:functions)
       Enum.map(signatures,
-        fn(signature) -> [{signature, module.__info__(:module)}] end)
+        fn(signature) -> [{ signature, module.__info__(:module) }] end)
     end
 
     metas = Enum.map(command_modules, loader)
