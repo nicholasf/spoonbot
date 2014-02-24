@@ -1,16 +1,24 @@
+
 #A simple, one server, multiple channels IRC bridge.
+
+defprotocol Speaker do
+  def speak(spoon_response)
+end
+
+
+defimpl Speaker, for: SpoonResponse do
+  def speak(spoon_response) do
+    IO.puts('ok')
+    IO.puts(spoon_response.msg)
+    # IO.inspect(socket)
+    # Bridge.IRC.say(socket, spoon_response.msg)
+  end
+end
 
 defmodule Bridge.IRC do
   use GenServer.Behaviour
+  import CommandHandler
   @moduledoc false
-
-  defimpl Robot, for: RobotResponse do
-
-    def speak(robot_response) do
-      IO.puts robot_response.msg
-    end
-
-  end
 
   def run(vocab) do
     { :ok, config } = :application.get_env(:spoonbot, :conf)
@@ -23,20 +31,32 @@ defmodule Bridge.IRC do
   end
 
   def do_listen(socket, vocab) do
-    ping      = %r/\APING/
-    motd_end  = %r/\/MOTD/
-    msg       = %r/PRIVMSG spoonbot/
+    ping      = ~r/\APING/
+    motd_end  = ~r/\/MOTD/
+    msg       = ~r/PRIVMSG spoonbot/
 
     case :gen_tcp.recv(socket, 0) do
       { :ok, data } ->
         IO.puts "#{data}"
 
-        if Regex.match?(motd_end, data), do: join(socket)
+        # if Regex.match?(motd_end, data), do: join(socket)
         if Regex.match?(ping, data), do: pong(socket, data)
 
         if Regex.match?(msg, data) do
-          matched_command = Enum.find(vocab, fn(command) -> Regex.match?(command.pattern, data) end)
-          say(socket, data)
+          IO.puts " ------------------------- "
+          IO.puts "parsing ... "
+          IO.inspect vocab
+          command = Enum.find(vocab, fn(command) ->
+            pattern = command[:pattern]
+            IO.puts "comparing #{pattern} to #{data} .... "
+            Regex.match?(pattern, data)
+          end)
+
+          if command do
+            IO.puts "found command #{command.atom}"
+            spoon_response = invoke_command(command, data)
+            Speaker.speak(spoon_response)
+          end
         end
 
         do_listen(socket, vocab)
@@ -59,21 +79,22 @@ defmodule Bridge.IRC do
     transmit(socket, "PRIVMSG #polyhack :#{phrase}")
   end
 
+
   def join(socket) do
     { :ok, config} = :application.get_env(:spoonbot, :conf )
     channel_list = Enum.at(config, 1)
 
     joiner = fn
-      { channel } -> transmit(socket, "JOIN #{channel}")
-      { channel, password } -> transmit(socket, "JOIN #{channel} #{password}")
+      { channel } -> transmit(socket, "JOIN #{ channel }")
+      { channel, password } -> transmit(socket, "JOIN #{ channel } #{ password }")
     end
 
     Enum.each(channel_list, joiner)
   end
 
   def pong(socket, data) do
-    server = Enum.at(Regex.split(%r/\s/, data), 1)
-    transmit(socket, "PONG #{server}")
+    server = Enum.at(Regex.split(~r/\s/, data), 1)
+    transmit(socket, "PONG #{ server }")
   end
 end
 
