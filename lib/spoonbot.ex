@@ -2,7 +2,7 @@ defmodule Spoonbot do
   use Application.Behaviour
 
   def start(_type, _args) do
-    command_modules = [ExampleCommand, ExampleCommand2]
+    command_modules = [ExampleCommand, Info]
 
     loader = fn(module) ->
       signatures = module.__info__(:functions)
@@ -35,19 +35,6 @@ defrecord SpoonCommand, pattern: nil, cmd: nil
 
 defrecord SpoonResponse, msg: nil
 
-# defprotocol Speaker do
-#   def speak(spoon_response, device)
-# end
-
-
-
-    # bot_hello = SpoonCommand.new(
-    #   pattern: ~r/speak/,
-    #   cmd: fn(data) ->
-    #       SpoonResponse.new(msg: data)
-    #     end
-    # )
-
 defmodule ExampleCommand do
   def hello(data) do
     "hello"
@@ -58,16 +45,8 @@ defmodule ExampleCommand do
   end
 end
 
-defmodule ExampleCommand2 do
-  def whatever(data) do
-    "whatever"
+defmodule Info do
+  def version(data) do
+   "My version is: #{System.version()}"
   end
 end
-
-# data structure looks like
-
-#{ module_name, function_name }
-
-#the bridge runs
-
-#apply(module_name, function_name, [data]) to produce a document

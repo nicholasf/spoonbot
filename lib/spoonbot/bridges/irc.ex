@@ -1,19 +1,16 @@
 
 #A simple, one server, multiple channels IRC bridge.
 
-defprotocol Speaker do
-  def speak(spoon_response)
-end
+# defprotocol Speaker do
+#   def speak(spoon_response)
+# end
 
-
-defimpl Speaker, for: SpoonResponse do
-  def speak(spoon_response) do
-    IO.puts('ok')
-    IO.puts(spoon_response.msg)
-    # IO.inspect(socket)
-    # Bridge.IRC.say(socket, spoon_response.msg)
-  end
-end
+# defimpl Speaker, for: SpoonResponse do
+#   def speak(spoon_response) do
+#     IO.puts(spoon_response.msg)
+#     Bridge.IRC.say(socket, spoon_response.msg)
+#   end
+# end
 
 defmodule Bridge.IRC do
   use GenServer.Behaviour
@@ -39,23 +36,20 @@ defmodule Bridge.IRC do
       { :ok, data } ->
         IO.puts "#{data}"
 
-        # if Regex.match?(motd_end, data), do: join(socket)
+        if Regex.match?(motd_end, data), do: join(socket)
         if Regex.match?(ping, data), do: pong(socket, data)
 
         if Regex.match?(msg, data) do
-          IO.puts " ------------------------- "
-          IO.puts "parsing ... "
-          IO.inspect vocab
           command = Enum.find(vocab, fn(command) ->
             pattern = command[:pattern]
-            IO.puts "comparing #{pattern} to #{data} .... "
             Regex.match?(pattern, data)
           end)
 
           if command do
-            IO.puts "found command #{command.atom}"
             spoon_response = invoke_command(command, data)
-            Speaker.speak(spoon_response)
+            IO.inspect spoon_response
+            IO.puts spoon_response.msg
+            say(socket, spoon_response.msg)
           end
         end
 
@@ -70,15 +64,18 @@ defmodule Bridge.IRC do
     :gen_tcp.send(socket, "#{msg} \r\n")
   end
 
+  def say(socket, msg) do
+    transmit(socket, "PRIVMSG #cbt :#{msg}")
+  end
+
   #needs to become channel aware
-  def say(socket, data) do
+  def raw_say(socket, data) do
     pieces = String.split(data, ":")
     phrase = Enum.drop(pieces, 2)
     IO.puts("Saying: #{phrase}")
 
-    transmit(socket, "PRIVMSG #polyhack :#{phrase}")
+    transmit(socket, "PRIVMSG #cbt :#{phrase}")
   end
-
 
   def join(socket) do
     { :ok, config} = :application.get_env(:spoonbot, :conf )
