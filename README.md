@@ -25,9 +25,9 @@ Any command should be able to work with any bridge.
 Spoonbot.ex will
 
 * start up via 'mix run --no-halt'.
-* read in a config for bridges use and command modules to load
+* read in a config for bridges to use and command modules to load
 * create a list of commands from the command modules
-* spawn a process for each bridge via its run(commands) function
+* spawn a process for each bridge via its run function and pass in command list
 
 
 ### Bridges
