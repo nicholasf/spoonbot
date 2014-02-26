@@ -1,33 +1,20 @@
 
-#A simple, one server, multiple channels IRC bridge.
-
-# defprotocol Speaker do
-#   def speak(spoon_response)
-# end
-
-# defimpl Speaker, for: SpoonResponse do
-#   def speak(spoon_response) do
-#     IO.puts(spoon_response.msg)
-#     Bridge.IRC.say(socket, spoon_response.msg)
-#   end
-# end
-
 defmodule Bridge.IRC do
   use GenServer.Behaviour
   import CommandHandler
   @moduledoc false
 
-  def run(vocab) do
+  def run(commands) do
     { :ok, config } = :application.get_env(:spoonbot, :conf)
     { server, port, nickname } = Enum.at(config, 0)
 
     { :ok, socket } = :gen_tcp.connect(:erlang.binary_to_list(server), port, [:binary, {:active, false}])
     :ok = transmit(socket, "NICK #{nickname}")
     :ok = transmit(socket, "USER #{nickname} #{server} spoonbot :spoonbot")
-    do_listen(socket, vocab)
+    do_listen(socket, commands)
   end
 
-  def do_listen(socket, vocab) do
+  def do_listen(socket, commands) do
     ping      = ~r/\APING/
     motd_end  = ~r/\/MOTD/
     msg       = ~r/PRIVMSG spoonbot/
@@ -40,20 +27,18 @@ defmodule Bridge.IRC do
         if Regex.match?(ping, data), do: pong(socket, data)
 
         if Regex.match?(msg, data) do
-          command = Enum.find(vocab, fn(command) ->
+          command = Enum.find(commands, fn(command) ->
             pattern = command[:pattern]
             Regex.match?(pattern, data)
           end)
 
           if command do
             spoon_response = invoke_command(command, data)
-            IO.inspect spoon_response
-            IO.puts spoon_response.msg
             say(socket, spoon_response.msg)
           end
         end
 
-        do_listen(socket, vocab)
+        do_listen(socket, commands)
       { :error, :closed } ->
         IO.puts "The client closed the connection..."
     end
