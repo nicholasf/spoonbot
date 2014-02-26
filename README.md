@@ -69,5 +69,6 @@ mix run --no-start
 
 * finalize basic structure and write tests
 * consider command rich language feature, perhaps by module attributes. Try to avoid macros.
+* consider extensibility via Umbrella Mix projects
 * consider OTP.
 * consider location transparency and bot networks.
