@@ -2,6 +2,18 @@
 
 Spoonbot isn't ready for general use yet.
 
+If you want to run it on IRC, edit the mix config and ensure you give me the bot a private name.
+
+```
+ env: [ conf: [ { "irc.freenode.org", 6667, "spoonbot" }, [ { "#polyhack" }, { "#elixir-lang" } ]] ]
+```
+
+Then use
+
+```
+mix run --no-halt
+```
+
 ## Design Overview for basic functionality (1.0.0)
 
 A spoonbot will use a configuration layer to wire together Bridges (methods of delivery) with nominated command modules.

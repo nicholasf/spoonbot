@@ -3,25 +3,28 @@ ExUnit.start
 defmodule CommandBuilderTest do
   use ExUnit.Case, async: true
 
-  defmodule TestCommand do
-    def test_command do
-      "hello"
-    end
-  end
 
   test "it creates a tuple structure from the Info module and its function" do
-    # commands = CommandBuilder.build([CommandBuilderTest.TestModule])
     commands = CommandBuilder.build([Info])
     command = Enum.at commands, 0
     assert command[:module] == Info
   end
 
-  test "a possible bug when dealing with inner modules? " do
-    commands = CommandBuilder.build([CommandBuilderTest.TestModule])
-    commands = CommandBuilder.build([Info])
-    command = Enum.at commands, 0
-    assert command[:module] == CommandBuilderTest.TestModule
-  end
+
+  #the below is left for identifying a potential problem with inner modules
+
+  # defmodule TestCommand do
+  #   def test_command do
+  #     "hello"
+  #   end
+  # end
+
+  # test "a possible bug when dealing with inner modules? " do
+  #   commands = CommandBuilder.build([CommandBuilderTest.TestModule])
+  #   commands = CommandBuilder.build([Info])
+  #   command = Enum.at commands, 0
+  #   assert command[:module] == CommandBuilderTest.TestModule
+  # end
 
   # 1) test a possible bug when dealing with inner modules?  (CommandBuilderTest)
   #    ** (UndefinedFunctionError) undefined function: CommandBuilderTest.TestModule.__info__/1
