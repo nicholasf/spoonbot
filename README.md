@@ -50,7 +50,7 @@ end
 
 Each function should return a string for use in bridges.
 
-At the moment commands cannot support rich language - 'what is time spoonbot?', etc.. Whether this is problematic or not, Im unsure.
+At the moment commands cannot support rich language - 'what is the time spoonbot?', etc.. Whether this is problematic or not, Im unsure.
 
 ### Testing
 
