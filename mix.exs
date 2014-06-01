@@ -4,14 +4,14 @@ defmodule Spoonbot.Mixfile do
   def project do
     [ app: :spoonbot,
       version: "0.0.1",
-      elixir: "~> 0.14.0-dev",
+      elixir: "~> 0.13.3",
       deps: deps ]
   end
 
   # Configuration for the OTP application
   def application do
     [ mod: { Spoonbot, [] },
-      env: [ conf: [ { "irc.freenode.org", 6667, "spoonbot" }, [ { "#polyhack" }, { "#elixir-lang" } ]] ]
+      env: [ conf: [ { "banks.freenode.net", 6667, "spoonbot" }, { "#nftest" } ] ]
     ]
   end
 
