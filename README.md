@@ -40,10 +40,11 @@ import Spoonbot
 
 command "pattern", fn(speaker) -> 
     #logic
+    #return a string holding the bot's response
 end
 ```
 A command takes a phrase for recognition then, followed by a comma, an anonymous function 
-with one argument - the name of the speaker in the IRC chatroom.
+with one argument - the name of the speaker in the IRC chatroom. It should return a string to appear in the chatroom.
 
 
 6. Connect to the running spoonbot Erlang Node and hot load a new command remotely.

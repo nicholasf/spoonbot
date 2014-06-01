@@ -12,3 +12,4 @@ end
 
 command "die", &("No, you die #{&1}!")
 command "quit", &("Haha, after you #{&1}!")
+
