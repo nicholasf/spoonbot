@@ -25,7 +25,6 @@ defmodule Bridge.IRC do
         if Regex.match?(ping, data), do: pong(socket, data)
 
         if Regex.match?(invoker, data) do
-          IO.puts "invoker  ... "
           bits = String.split(data, ~r/:spoonbot:/)
           phrase = String.strip(Enum.at bits, 1)
           command = Commands.find(phrase)
@@ -57,7 +56,6 @@ defmodule Bridge.IRC do
       { channel, password } -> transmit(socket, "PRIVMSG #{channel} :#{msg}")
     end
 
-    IO.inspect channel
     responder.(channel)
   end
 

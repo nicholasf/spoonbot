@@ -9,9 +9,11 @@ defmodule Spoonbot.Mixfile do
   end
 
   # Configuration for the OTP application
+  #
+  # Type `mix help compile.app` for more information
   def application do
-    [ mod: { Spoonbot, [] },
-      env: [ conf: [ { "banks.freenode.net", 6667, "spoonbot" }, { "#nftest" } ] ]
+    [ applications: [],
+      mod: { Spoonbot, [] }
     ]
   end
 
