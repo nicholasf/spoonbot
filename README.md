@@ -6,7 +6,7 @@ You will need Elixir 0.13.3 or more recent installed. See http://elixir-lang.org
 
 ## Make your own
 
-1. Fork spoonbot's repo.
+1. Clone spoonbot's repo.
 
 2. Open config/config.exs 
 
