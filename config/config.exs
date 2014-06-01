@@ -21,7 +21,7 @@
 # [dep1: [key: :value],
 #  dep2: [key: :value]]
 
-#env: [ conf: [ { "banks.freenode.net", 6667, "spoonbot" }, { "#nftest" } ] ]
 
-
-[ spoonbot: [conf: [ { "banks.freenode.net", 6667, "spoonbot" }, { "#nftest" } ] ] ]
+[ spoonbot: 
+    [ conf: [ { "banks.freenode.net", 6667, "spoonbot" }, { "#nftest" } ] ] 
+]

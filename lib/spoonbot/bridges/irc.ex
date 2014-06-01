@@ -6,7 +6,7 @@ defmodule Bridge.IRC do
     { server, port, nickname } = Enum.at(config, 0)
     { :ok, socket } = :gen_tcp.connect(:erlang.binary_to_list(server), port, [:binary, {:active, false}])
     :ok = transmit(socket, "NICK #{nickname}")
-    :ok = transmit(socket, "USER #{nickname} #{server} spoonbot :spoonbot")
+    :ok = transmit(socket, "USER #{nickname} #{server} #{bot_name} :#{bot_name}")
     do_listen(socket)
   end
 
@@ -15,7 +15,7 @@ defmodule Bridge.IRC do
     motd_end  = ~r/\/MOTD/
     msg       = ~r/PRIVMSG spoonbot/
     { channel_name  } = channel
-    { :ok, invoker }  = Regex.compile("PRIVMSG #{channel_name} :spoonbot:")
+    { :ok, invoker }  = Regex.compile("PRIVMSG #{channel_name} :#{bot_name}:")
 
     case :gen_tcp.recv(socket, 0) do
       { :ok, data } ->
@@ -30,14 +30,10 @@ defmodule Bridge.IRC do
           command = Commands.find(phrase)
           if command do
             { phrase, func } = command
-            result = func.()
+            result = func.(speaker(Enum.at bits, 0))
             say(socket, result)
           end
         end
-
-        # if Regex.match?(msg, data) do
-        #   IO.puts "msg ... "
-        # end
 
         do_listen(socket)
       { :error, :closed } ->
@@ -78,7 +74,20 @@ defmodule Bridge.IRC do
     config
   end
 
+  def bot_name do
+    { _, _, name } = Enum.at(config, 0)
+    name
+  end
+
   def channel do
     Enum.at(config, 1)
   end
+
+  def speaker(irc_fragment) do
+    bits = String.split(irc_fragment, "!")
+    str = Enum.at bits, 0
+    String.slice(str, 1..-1)
+  end
 end
+
+
