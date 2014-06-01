@@ -1,8 +1,6 @@
 import Spoonbot
 
-command "funky", fn (speaker) -> 
-    "#{speaker}: cold medina!" 
-end
+command "funky", &("#{&1}: cold medina!") 
 
 command "heya", fn (speaker) -> 
     greetings = [

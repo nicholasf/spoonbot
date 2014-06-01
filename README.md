@@ -1,4 +1,4 @@
-Spoonbot - an IRC bot written in Elixir.
+Spoonbot - an IRC bot written in Elixir with a simple command syntax.
 
 ## Install
 
@@ -35,6 +35,17 @@ elixir --sname spoonbot -S mix run --no-halt
 
 5. Open spoonbot.exs and see how you can write simple Spoonbot commands.
 
+```
+import Spoonbot
+
+command "pattern", fn(speaker) -> 
+    #logic
+end
+```
+A command takes a phrase for recognition then, followed by a comma, an anonymous function 
+with one argument - the name of the speaker in the IRC chatroom.
+
+
 6. Connect to the running spoonbot Erlang Node and hot load a new command remotely.
 
 ```
@@ -47,7 +58,7 @@ true
 iex(bark@argo)3> import Spoonbot
 nil
     
-iex(bark@argo)4> command "mirror me", fn(speaker) -> String.reverse(speaker) end
+iex(bark@argo)4> command "mirror me", &(String.reverse(&1))
 :ok
 
 ```
@@ -59,5 +70,3 @@ Add more commands in spoonbot.exs or build your own exs file and parse it in the
 ```
 iex(bark@argo)4> Code.require_file("alternate_commands.exs") 
 ```
-
-(Ensure that your alternate command file imports Spoonbot).
