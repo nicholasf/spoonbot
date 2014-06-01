@@ -4,7 +4,7 @@ defmodule Spoonbot.Mixfile do
   def project do
     [ app: :spoonbot,
       version: "0.0.1",
-      elixir: "~> 0.12.5-dev",
+      elixir: "~> 0.14.0-dev",
       deps: deps ]
   end
 
@@ -21,7 +21,6 @@ defmodule Spoonbot.Mixfile do
   # To specify particular versions, regardless of the tag, do:
   # { :barbat, "~> 0.1", github: "elixir-lang/barbat" }
   defp deps do
-    [ { :cowboy, github: "extend/cowboy" },
-      { :plug, github: "elixir-lang/plug"} ]
+    []
   end
 end

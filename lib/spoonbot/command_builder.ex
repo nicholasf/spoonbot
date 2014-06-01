@@ -17,7 +17,8 @@ defmodule CommandBuilder do
       name = atom_to_binary elem(signature, 0)
       pattern = ~r/#{name}/ #consider calling Regex.escape/1 here
       arity = elem(signature, 1)
-      HashDict.new([module: module, pattern: pattern, atom: atom, arity: arity])
+      command = HashDict.new()
+      HashDict.put(command, [module: module, pattern: pattern, atom: atom, arity: arity])
     end
 
     Enum.map(metas, command_loader)
