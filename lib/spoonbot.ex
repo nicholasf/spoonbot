@@ -13,9 +13,7 @@ defmodule Spoonbot do
     Supervisor.start_link(children, opts)
   end
 
-  defmacro command(phrase, func) do
-    quote do
-      Commands.add({ unquote(phrase), unquote(func) })
-    end
+  def command(phrase, func) do
+      Commands.add({ phrase, func })
   end
 end
