@@ -53,6 +53,11 @@ command "say (.*)", fn (speaker, args) ->
 end
 ```
 
+```
+6:45 PM <nicholasf> spoonbot: say something or other
+6:45 PM <spoonbot> something or other
+````
+
 Connect to the running spoonbot Erlang Node and hot load a new command remotely.
 
 ```
