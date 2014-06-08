@@ -43,9 +43,14 @@ command "pattern", fn(speaker) ->
     #return a string holding the bot's response
 end
 ```
-A command takes a phrase for recognition then, followed by a comma, an anonymous function 
+The simplest command takes a phrase for recognition then, followed by a comma, an anonymous function 
 with one argument - the name of the speaker in the IRC chatroom. It should return a string to appear in the chatroom.
 
+If you want to parse the bot's input pass in a string that can be compiled into a Regex. Then your function will take two arguments, the second for the arguments parsed from the regex.
+
+command "say (.*)", fn (speaker, args) -> 
+    Enum.at(args, 0) 
+end
 
 6. Connect to the running spoonbot Erlang Node and hot load a new command remotely.
 
