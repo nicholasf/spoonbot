@@ -33,7 +33,7 @@ When the bot appears in the channel speak to it:
 
 ```
 
-Open spoonbot.exs and see how you can write simple Spoonbot commands.
+Open spoonbot.exs and see how you can write Spoonbot commands.
 
 ```
 import Spoonbot
