@@ -16,8 +16,7 @@ Open config/config.exs
 ]
 
 ```
-
-Replace the "spoonbot" string with the name of your bot. Replace the "#polyhack" string with the IRC channel you wish your bot to live in.
+Configure the conf variable with the address of the IRC server, its port, the client name, and the connected channel.
 
 Start your bot.
 
