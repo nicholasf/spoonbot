@@ -19,13 +19,13 @@ You will need Elixir 0.13.3 or more recent installed. See http://elixir-lang.org
 
 Replace the "spoonbot" string with the name of your bot. Replace the "#polyhack" string with the IRC channel you wish your bot to live in.
 
-1. Start your bot.
+Start your bot.
 
 ```
 elixir --sname spoonbot -S mix run --no-halt
 ```
 
-1. When the bot appears in the channel speak to it:
+When the bot appears in the channel speak to it:
 
 ```
 4:09 PM <•nicholasf> spoonbot: heya
@@ -33,7 +33,7 @@ elixir --sname spoonbot -S mix run --no-halt
 
 ```
 
-1. Open spoonbot.exs and see how you can write simple Spoonbot commands.
+Open spoonbot.exs and see how you can write simple Spoonbot commands.
 
 ```
 import Spoonbot
@@ -52,7 +52,7 @@ command "say (.*)", fn (speaker, args) ->
     Enum.at(args, 0) 
 end
 
-1. Connect to the running spoonbot Erlang Node and hot load a new command remotely.
+Connect to the running spoonbot Erlang Node and hot load a new command remotely.
 
 ```
 ♪  spoonbot git:(master) ✗ iex --sname bark
