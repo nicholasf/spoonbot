@@ -2,6 +2,11 @@ import Spoonbot
 
 command "funky", &("#{&1}: cold medina!") 
 
+command "say (.*)", fn (speaker, args) -> 
+    Enum.at(args, 0) 
+end
+
+
 command "heya", fn (speaker) -> 
     greetings = [
         "yo", "backatcha", "aight", "hi", "g'day",

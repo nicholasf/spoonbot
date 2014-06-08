@@ -29,8 +29,17 @@ defmodule Bridge.IRC do
           phrase = String.strip(Enum.at bits, 1)
           command = Commands.find(phrase)
           if command do
-            { phrase, func } = command
-            result = func.(speaker(Enum.at bits, 0))
+            { pattern, func } = command
+            args = Regex.scan(pattern, phrase, capture: :all_but_first)
+            speaker_name = speaker(Enum.at bits, 0)
+            args = Enum.filter(args, &((Enum.count &1) > 0))
+
+            if (Enum.count(args) > 0) do
+              result = func.(speaker_name, Enum.at(args, 0))
+            else
+              result = func.(speaker_name)
+            end
+
             say(socket, result)
           end
         end

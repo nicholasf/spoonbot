@@ -23,5 +23,5 @@
 
 
 [ spoonbot: 
-    [ conf: [ { "banks.freenode.net", 6667, "spoonbot" }, { "#polyhack" } ] ] 
+    [ conf: [ { "banks.freenode.net", 6667, "spoonbot" }, { "#polyhack2" } ] ] 
 ]

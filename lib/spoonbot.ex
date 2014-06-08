@@ -14,6 +14,7 @@ defmodule Spoonbot do
   end
 
   def command(phrase, func) do
-      Commands.add({ phrase, func })
+      { :ok, pattern } = Regex.compile(phrase)
+      Commands.add({ pattern, func })
   end
 end
