@@ -79,7 +79,7 @@ defmodule Bridge.IRC do
   end
 
   def config do
-    { :ok, config} = :application.get_env(:spoonbot, :conf )
+    { :ok, config } = :application.get_env(:spoonbot, :conf)
     config
   end
 
