@@ -4,6 +4,6 @@ defmodule ComandsTest do
   test "add and find" do
     Commands.add({ ~r/test/, &(&1) })
     { regex, text } = Commands.find("test")
-    assert text = "test"
+    assert text.("test") == "test"
   end
 end
