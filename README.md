@@ -67,15 +67,16 @@ Erlang/OTP 17 [erts-6.0] [source] [64-bit] [smp:8:8] [async-threads:10] [hipe] [
 Interactive Elixir (0.13.3) - press Ctrl+C to exit (type h() ENTER for help)
 iex(bark@argo)1> Node.connect :spoonbot@argo
 true
-iex(bark@argo)3> import Spoonbot
+(bark@argo)2> c "lib/spoonbot/commands.ex"
+[Commands]
+iex(bark@argo)3> import Commands
 nil
-    
 iex(bark@argo)4> command "mirror me", &(String.reverse(&1))
 :ok
 
 ```
 
-The command will be ready in the bot.
+The command will be ready in the bot. 
 
 Add more commands in spoonbot.exs or build your own exs file and parse it in the remote node:
 

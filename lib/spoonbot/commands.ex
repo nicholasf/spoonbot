@@ -6,11 +6,11 @@ defmodule Commands do
     end 
 
     def add(command) do
-        Agent.update(@name, &Set.put(&1, command))
+        Agent.update(@name, fn(set) -> Set.put(set, command) end)
     end
 
     def find(phrase) do
-        set = Agent.get(@name, &(&1))
-        Enum.find(set, fn ({ pattern, func }) -> Regex.match?(pattern, phrase) end) 
+        set = Agent.get(@name, fn(set) -> set end)
+        Enum.find(set, fn ({ pattern, _ }) -> Regex.match?(pattern, phrase) end) 
     end
 end
