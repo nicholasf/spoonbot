@@ -67,9 +67,11 @@ Erlang/OTP 17 [erts-6.0] [source] [64-bit] [smp:8:8] [async-threads:10] [hipe] [
 Interactive Elixir (0.13.3) - press Ctrl+C to exit (type h() ENTER for help)
 iex(bark@argo)1> Node.connect :spoonbot@argo
 true
-(bark@argo)2> c "lib/spoonbot/commands.ex"
+iex(bark@argo)2> c "lib/spoonbot.ex"
+[Spoonbot]
+iex(bark@argo)2> c "lib/spoonbot/commands.ex"
 [Commands]
-iex(bark@argo)3> import Commands
+iex(bark@argo)3> import Spoonbot
 nil
 iex(bark@argo)4> command "mirror me", &(String.reverse(&1))
 :ok
