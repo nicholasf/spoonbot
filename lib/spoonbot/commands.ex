@@ -3,18 +3,18 @@ defmodule Commands do
 
   def start_link do
     Agent.start_link( fn-> [] end, name: @name )
-end 
+  end 
 
-def add(command) do
+  def add(command) do
     Agent.update(@name, &add_command(&1, command))
-end
+  end
 
-def find(phrase) do
+  def find(phrase) do
     command_list = Agent.get(@name, &(&1))
     Enum.find(command_list, fn ({ pattern, func }) -> Regex.match?(pattern, phrase) end) 
-end
+  end
 
-defp add_command(list, command) do
+  defp add_command(list, command) do
     [command | list]
-end
+  end
 end
