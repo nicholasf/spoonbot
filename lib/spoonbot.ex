@@ -7,7 +7,7 @@ defmodule Spoonbot do
     opts = [strategy: :one_for_one, name: Spoonbot.Supervisor]
 
     Commands.start_link
-    # spawn(Bridge.IRC, :run, [])
+    spawn(Bridge.IRC, :run, [])
     Code.require_file("spoonbot.exs")
 
     Supervisor.start_link(children, opts)
