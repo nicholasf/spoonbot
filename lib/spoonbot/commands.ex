@@ -1,5 +1,5 @@
 defmodule Commands do
-  @name { :global, __MODULE__ }
+    @name { :global, __MODULE__ }
 
     def start_link do
         Agent.start_link( fn-> [] end, name: @name )
