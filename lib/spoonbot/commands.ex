@@ -2,7 +2,7 @@ defmodule Commands do
     @name { :global, __MODULE__ }
 
     def start_link do
-        Agent.start_link( fn-> [] end, name: @name )
+        Agent.start_link( fn-> HashDict.new end, name: @name )
     end 
 
     def add(command) do
@@ -10,11 +10,12 @@ defmodule Commands do
     end
 
     def find(phrase) do
-        command_list = Agent.get(@name, &(&1))
-        Enum.find(command_list, fn ({ pattern, func }) -> Regex.match?(pattern, phrase) end) 
+        dict = Agent.get(@name, &(&1))
+        list = Dict.values dict
+        Enum.find(list, fn ({ pattern, func }) -> Regex.match?(pattern, phrase) end) 
     end
 
-    defp add_command(list, command) do
-        [command | list]
+    defp add_command(dict, command) do
+        Dict.put(dict, elem(command, 0), command) 
     end
 end
