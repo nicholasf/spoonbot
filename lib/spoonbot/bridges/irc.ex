@@ -1,6 +1,5 @@
 
 defmodule Bridge.IRC do
-  use GenServer.Behaviour
 
   def run() do
     { server, port, nickname } = Enum.at(config, 0)
