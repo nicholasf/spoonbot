@@ -14,7 +14,7 @@ defmodule Bridge.IRC do
     motd_end  = ~r/\/MOTD/
     msg       = ~r/PRIVMSG spoonbot/
     { channel_name  } = channel
-    { :ok, invoker }  = Regex.compile("PRIVMSG #{channel_name} :#{bot_name}")
+    { :ok, invoker }  = Regex.compile("PRIVMSG #{channel_name} :#{bot_name}:")
 
     case :gen_tcp.recv(socket, 0) do
       { :ok, data } ->
@@ -24,7 +24,7 @@ defmodule Bridge.IRC do
         if Regex.match?(ping, data), do: pong(socket, data)
 
         if Regex.match?(invoker, data) do
-          bits = String.split(data, ~r/:spoonbot:/)
+          bits = String.split(data, ":#{bot_name}:")
           phrase = String.strip(Enum.at bits, 1)
           command = Commands.find(phrase)
           if command do
@@ -97,5 +97,3 @@ defmodule Bridge.IRC do
     String.slice(str, 1..-1)
   end
 end
-
-
